@@ -1,0 +1,73 @@
+{% autoescape None %}
+
+{% extends 'base.html' %}
+
+{% block body %}
+  <div id="index">
+    <select class="form-control" v-on:change="changeSize">
+      <option value="">--</option>
+      <option
+        v-for="size in sizes"
+        v-bind:value="size.id"
+      >
+        ${ size.name }
+      </option>
+    </select>
+    <select class="form-control" v-on:change="changeFinish">
+      <option value="">--</option>
+      <option
+        v-for="finish in finishes"
+        v-bind:value="finish.id"
+      >
+        ${ finish.name }
+      </option>
+    </select>
+    <select class="form-control" v-on:change="changeType">
+      <option value="">--</option>
+      <option
+        v-for="type in types"
+        v-bind:value="type.id"
+      >
+        ${ type.name }
+      </option>
+    </select>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Sizes</th>
+          <th>Finish</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="widget in widgets">
+          <td>${ widget.type.name }</td>
+          <td>
+            <select class="form-control">
+              <option
+                v-for="size in widget.sizes"
+                v-bind:value="size.id"
+              >
+                ${ size.name }
+              </option>
+            </select>
+          </td>
+          <td>
+            <select class="form-control">
+              <option
+                v-for="finish in widget.finishes"
+                v-bind:value="finish.id"
+              >
+                ${ finish.name }
+              </option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% end %}
+
+{% block scripts %}
+<script src="static/index.js"></script>
+{% end %}

@@ -5,7 +5,7 @@ import server.transactions as transactions
 import server.serializers as serializers
 
 
-class WidgetListHandler(RequestHandler):
+class WidgetListAPIHandler(RequestHandler):
     def get(self):
         widget_type = self.get_argument('type', None)
         size = self.get_argument('size', None)
@@ -18,7 +18,7 @@ class WidgetListHandler(RequestHandler):
         self.write(json_encode(serialized_widgets))
 
 
-class WidgetTypeListHandler(RequestHandler):
+class WidgetTypeListAPIHandler(RequestHandler):
     def get(self):
         widget_types = transactions.get_widget_type_list()
         serialized_widget_types = [
@@ -28,7 +28,7 @@ class WidgetTypeListHandler(RequestHandler):
         self.write(json_encode(serialized_widget_types))
 
 
-class WidgetSizeListHandler(RequestHandler):
+class WidgetSizeListAPIHandler(RequestHandler):
     def get(self):
         widget_sizes = transactions.get_widget_size_list()
         serialized_widget_sizes = [
@@ -38,7 +38,7 @@ class WidgetSizeListHandler(RequestHandler):
         self.write(json_encode(serialized_widget_sizes))
 
 
-class WidgetHandler(RequestHandler):
+class WidgetAPIHandler(RequestHandler):
     def get(self, widget_id):
         widget = transactions.get_widget(widget_id)
 
@@ -48,7 +48,7 @@ class WidgetHandler(RequestHandler):
         self.write(json_encode(serializers.widget_serializer(widget)))
 
 
-class WidgetFinishListHandler(RequestHandler):
+class WidgetFinishListAPIHandler(RequestHandler):
     def get(self):
         widget_finishes = transactions.get_widget_finish_list()
         serialised_widget_finishes = [
@@ -58,7 +58,7 @@ class WidgetFinishListHandler(RequestHandler):
         self.write(json_encode(serialised_widget_finishes))
 
 
-class OrderListHandler(RequestHandler):
+class OrderListAPIHandler(RequestHandler):
     def get(self):
         orders = transactions.get_order_list()
         serialized_orders = [
@@ -70,3 +70,8 @@ class OrderListHandler(RequestHandler):
     def post(self):
         data = json_decode(self.request.body)
         print(data)
+
+
+class IndexPage(RequestHandler):
+    def get(self):
+        self.render('index.html', xsrf_token=self.xsrf_token)

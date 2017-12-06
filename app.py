@@ -9,19 +9,24 @@ import server.views as views
 
 load_dotenv(find_dotenv())
 
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
 SETTINGS = {
-    'static_path': os.path.join(os.path.dirname(__file__), '/server/static/'),
+    'static_path': os.path.join(PROJECT_ROOT, 'server/static'),
+    'template_path': os.path.join(PROJECT_ROOT, 'server/templates'),
     'cookie_secret': os.environ.get('CODING_CHALLENGE_COOKIE_SECRET', 'secret'),
-    'xsrf_cookies': True
+    'xsrf_cookies': True,
+    'debug': True
 }
 
 URLS = [
-    (r'/api/v1/widgets/([0-9]+)/', views.WidgetHandler),
-    (r'/api/v1/widgets/', views.WidgetListHandler),
-    (r'/api/v1/widgets/types/', views.WidgetTypeListHandler),
-    (r'/api/v1/widgets/sizes/', views.WidgetSizeListHandler),
-    (r'/api/v1/widgets/finishes/', views.WidgetFinishListHandler),
-    (r'/api/v1/orders/', views.OrderListHandler)
+    (r'/', views.IndexPage),
+    (r'/api/v1/widgets/([0-9]+)/', views.WidgetAPIHandler),
+    (r'/api/v1/widgets/', views.WidgetListAPIHandler),
+    (r'/api/v1/widgets/types/', views.WidgetTypeListAPIHandler),
+    (r'/api/v1/widgets/sizes/', views.WidgetSizeListAPIHandler),
+    (r'/api/v1/widgets/finishes/', views.WidgetFinishListAPIHandler),
+    (r'/api/v1/orders/', views.OrderListAPIHandler)
 ]
 
 if __name__ == '__main__':
