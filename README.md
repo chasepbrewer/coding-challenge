@@ -1,6 +1,6 @@
 # Coding Challenge
 
-Built with Python, Tornado, SQLite, Vue.js, and Bootstrap.
+Built with Python, Tornado, SQLite, Vue.js, and Bootstrap. Project was made to be lightweight and lacks any complex build steps.
 
 ## Dependencies
 
@@ -35,6 +35,11 @@ Run the server by running this command:
 $ python app.py
 ```
 
+## Routes
+
+* `/`: View the current list of widgets, filter the list, and create a new order.
+
+
 ## REST API Endpoints
 
 * `/api/v1/widgets/`: Returns a list of all the current widgets.
@@ -46,11 +51,12 @@ $ python app.py
 * `/api/v1/widgets/sizes/`: Returns a list of all the widget sizes.
 * `/api/v1/widgets/finishes/`: Returns a list of all the widget finishes.
 * `/api/v1/orders/`: Returns a list of current orders and allows posting of new orders.
-* `/api/v1/orders/1/`: Returns a specific order and allows modifications of current orders.
-* `/api/v1/orders/1/widgets/`: Returns a the list of widgets associated with an order and allows adding of new widgets.
-* `/api/v1/orders/1/widgets/3/`: Returns a widget associated with an order and allows modifications to that widget.
+* `/api/v1/orders/1/`: Returns a specific order, creates a new order, and allows modifications of current orders.
+* `/api/v1/orders/1/widgets/`: Returns the list of widgets associated with an order and allows adding of new widgets.
+* `/api/v1/orders/1/widgets/3/`: Returns a widget associated with an order and allows deletion of that widget.
 
 ## Improvements
 
 * Separate views and transactions by object type. Currently all transactions are grouped together and all views are grouped together, but as the app grows it would be more logical to group them by their associated objects they are showing or manipulating. It would make adding more objects as the application grows a bit simpler. That would currently be a bit overkill due to the small amount of views and transactions.
 * Adding a data model layer. I currently pass around data between views and objects via tuples and dictionaries, but it would help developer understanding if data from each were placed in class instances that can be documented. At the current stage of this application, it would be a bit overkill and take more time.
+* Adding a widget creation and modification page. Due to time constraints I was unable to get this part done.
