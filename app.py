@@ -15,8 +15,7 @@ SETTINGS = {
     'static_path': os.path.join(PROJECT_ROOT, 'server/static'),
     'template_path': os.path.join(PROJECT_ROOT, 'server/templates'),
     'cookie_secret': os.environ.get('CODING_CHALLENGE_COOKIE_SECRET', 'secret'),
-    'xsrf_cookies': True,
-    'debug': True
+    'xsrf_cookies': True
 }
 
 URLS = [
