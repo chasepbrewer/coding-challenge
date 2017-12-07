@@ -1,3 +1,7 @@
+"""
+Utility functions that perform actions on the database.
+"""
+
 import os.path as path
 
 from sqlite3 import connect

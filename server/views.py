@@ -1,5 +1,9 @@
+"""
+Views for the API and template rendering.
+"""
+
 from tornado.web import RequestHandler
-from tornado.escape import json_decode, json_encode
+from tornado.escape import json_decode
 
 import server.transactions as transactions
 import server.serializers as serializers
@@ -95,7 +99,7 @@ class OrderAPIHandler(RequestHandler):
 
 class OrderListAPIHandler(RequestHandler):
     """
-    REST API endpoint handler for
+    REST API endpoint handler for order lists.
     """
     def get(self):
         orders = transactions.get_order_list()
@@ -113,13 +117,26 @@ class OrderListAPIHandler(RequestHandler):
 
 
 class OrderWidgetAPIHandler(RequestHandler):
+    """
+    REST API endpoint handler for an order_widget object.
+    """
     def delete(self, order_id, order_widget_id):
         transactions.remove_widget_from_order(order_widget_id)
 
         self.finish()
 
+    def get(self, order_id, order_widget_id):
+        order_widget = transactions.get_order_widget(order_widget_id)
+        serialized_order_widget = serializers.order_widget_serializer(
+            order_widget)
+
+        self.write(serialized_order_widget)
+
 
 class OrderWidgetListAPIHandler(RequestHandler):
+    """
+    REST API endpoint handler for order_widget lists.
+    """
     def get(self, order_id):
         order_widgets = transactions.get_order_widgets(order_id)
         serialized_order_widgets = [
@@ -145,5 +162,8 @@ class OrderWidgetListAPIHandler(RequestHandler):
 
 
 class IndexPage(RequestHandler):
+    """
+    Displays the root index page of the server.
+    """
     def get(self):
         self.render('index.html', xsrf_token=self.xsrf_token)
