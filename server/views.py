@@ -120,12 +120,12 @@ class OrderWidgetAPIHandler(RequestHandler):
     """
     REST API endpoint handler for an order_widget object.
     """
-    def delete(self, order_id, order_widget_id):
+    def delete(self, order_widget_id):
         transactions.remove_widget_from_order(order_widget_id)
 
         self.finish()
 
-    def get(self, order_id, order_widget_id):
+    def get(self, order_widget_id):
         order_widget = transactions.get_order_widget(order_widget_id)
         serialized_order_widget = serializers.order_widget_serializer(
             order_widget)

@@ -37,8 +37,8 @@ window.api = (function(axios, XSRFToken) {
     return axios.get(root + '/orders/' + orderID + '/');
   };
 
-  module.deleteOrderWidget = function(orderID, widgetID) {
-    return axios.delete(root + '/orders/' + orderID + '/widgets/' + widgetID + '/');
+  module.deleteOrderWidget = function(widgetID) {
+    return axios.delete(root + '/orders/widgets/' + widgetID + '/');
   };
 
   module.deleteOrder = function(orderID) {

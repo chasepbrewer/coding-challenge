@@ -98,9 +98,10 @@
 
         var self = this;
 
-        return api.deleteOrderWidget(this.order.id, orderWidgetID).then(function() {
+        return api.deleteOrderWidget(orderWidgetID).then(function() {
           return api.getOrder(self.order.id);
         }).then(function(response) {
+          // If there are no more widgets left in the order, delete the order.
           if (!response.data.widgets.length) {
             return self.deleteOrder();
           }
