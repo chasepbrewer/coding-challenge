@@ -1,5 +1,6 @@
 (function(Vue, api, _) {
-  window.indexComponent = new Vue({
+  // Vue instance for the index page.
+  new Vue({
     el: '#index',
     delimiters: ['${', '}'],
     data: {
@@ -12,7 +13,7 @@
       finishes: [],
       selectedSizes: {},
       selectedFinishes: {},
-      widgets: [],
+      widgets: []
     },
     created: function() {
       this.getWidgets();
@@ -21,12 +22,13 @@
       this.getWidgetTypes();
     },
     methods: {
+      /** Populates the current instance with widgets matching parameters. */
       getWidgets: function() {
         var self = this;
         var params = {
           size: this.size,
           type: this.type,
-          finish: this.finish,
+          finish: this.finish
         };
 
         api.fetchWidgets(params).then(function(response) {
@@ -40,6 +42,8 @@
           })
         })
       },
+
+      /** Populates instance with all widget sizes. */
       getWidgetSizes: function() {
         var self = this;
 
@@ -47,6 +51,8 @@
           self.sizes = response.data.results;
         });
       },
+
+      /** Populates instance with all widget finishes. */
       getWidgetFinishes: function() {
         var self = this;
 
@@ -54,6 +60,8 @@
           self.finishes = response.data.results;
         });
       },
+
+      /** Populates instance with all widget types. */
       getWidgetTypes: function() {
         var self = this;
 
@@ -61,10 +69,15 @@
           self.types = response.data.results;
         });
       },
-      changeSize: function(event) {
-        this.size = event.target.value;
-        this.getWidgets();
-      },
+
+      /**
+       * Adds a widget to the current order.
+       * @param widgetID {number}
+       * @param widgetSizeID {number}
+       * @param widgetFinishID {number}
+       * @param amount {number}
+       * @returns {Promise}
+       */
       addOrderWidget: function(widgetID, widgetSizeID, widgetFinishID, amount) {
         if (!this.order) {
           return this.createOrder(
@@ -82,6 +95,15 @@
           self.order = response.data;
         });
       },
+
+      /**
+       * Creates a new order
+       * @param widgetID {number}
+       * @param widgetSizeID {number}
+       * @param widgetFinishID {number}
+       * @param amount {number}
+       * @returns {Promise}
+       */
       createOrder: function(widgetID, widgetSizeID, widgetFinishID, amount) {
         var self = this;
 
@@ -93,6 +115,12 @@
           );
         });
       },
+
+      /**
+       * Deletes a widget from the current order.
+       * @param orderWidgetID {number}
+       * @returns {Promise | undefined}
+       */
       deleteOrderWidget: function(orderWidgetID) {
         if (!this.order) { return; }
 
@@ -109,6 +137,8 @@
           self.order = response.data;
         });
       },
+
+      /** Deletes the current order. */
       deleteOrder: function() {
         if (!this.order) { return; }
 
