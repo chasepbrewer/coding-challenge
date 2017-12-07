@@ -20,5 +20,30 @@ window.api = (function(axios, XSRFToken) {
     return axios.get(root + '/widgets/types/');
   };
 
+  module.createOrder = function() {
+    return axios.post(root + '/orders/');
+  };
+
+  module.addOrderWidget = function(orderID, widgetID, widgetSizeID, widgetFinishID, amount) {
+    return axios.post(root + '/orders/' + orderID + '/widgets/', {
+      widget_id: widgetID,
+      widget_size_id: widgetSizeID,
+      widget_finish_id: widgetFinishID,
+      amount: amount,
+    });
+  };
+
+  module.getOrder = function(orderID) {
+    return axios.get(root + '/orders/' + orderID + '/');
+  };
+
+  module.deleteOrderWidget = function(orderID, widgetID) {
+    return axios.delete(root + '/orders/' + orderID + '/widgets/' + widgetID + '/');
+  };
+
+  module.deleteOrder = function(orderID) {
+    return axios.delete(root + '/orders/' + orderID + '/');
+  };
+
   return module;
 })(axios, window.XSRFToken);

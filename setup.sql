@@ -40,6 +40,7 @@ create table orders (
 );
 
 create table order_widgets (
+  id integer primary key,
   order_id integer not null,
   widget_id integer not null,
   widget_size_id integer not null,
@@ -48,8 +49,7 @@ create table order_widgets (
   foreign key (order_id) references orders(id),
   foreign key (widget_id) references widgets(id),
   foreign key (widget_size_id) references widget_sizes(id),
-  foreign key (widget_finish_id) references widget_finishes(id),
-  primary key (order_id, widget_id)
+  foreign key (widget_finish_id) references widget_finishes(id)
 );
 
 insert into widget_sizes (name) values ('Small'), ('Medium'), ('Large');

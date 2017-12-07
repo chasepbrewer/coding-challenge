@@ -1,5 +1,6 @@
-from sqlite3 import connect
 import os.path as path
+
+from sqlite3 import connect
 
 conn = connect(path.join(path.dirname(__file__), '../data.db'))
 
@@ -21,7 +22,7 @@ def get_widget_list(widget_type=None, size=None, finish=None):
     filters = []
 
     if widget_type:
-        filters.append('type_id = :type')
+        filters.append('id = :type')
 
     if size:
         filters.append('id in (select widget_id from widget_size_map '
@@ -171,24 +172,55 @@ def get_order_widgets(order_id):
     :return: list of (int, int, int, int, int)
     """
     c = conn.cursor()
-    c.execute('select order_id, widget_id, widget_size_id, '
-              'widget_finish_id, amount where order_id = ?', (order_id,))
+    c.execute('select id, order_id, widget_id, widget_size_id, '
+              'widget_finish_id, amount from order_widgets '
+              'where order_id = ?', (order_id,))
 
     return c.fetchall()
 
 
 def create_order():
+    """
+    Creates an order.
+    :return: int
+    """
     c = conn.cursor()
-    c.execute('insert into orders values ()')
+    c.execute('insert into orders default values')
 
     return c.lastrowid
 
-
-def get_order_widget(order_id, widget_id):
+def get_order(order_id):
+    """
+    Gets an order by it's id.
+    :param order_id: int
+    :return: (int) or None
+    """
     c = conn.cursor()
-    c.execute('select order_id, widget_id, widget_size_id, '
-              'widget_finish_id, amount where order_id = ? and '
-              'widget_id = ?', (order_id, widget_id,))
+    c.execute('select id from orders where id = ?', order_id)
+
+    return c.fetchone()
+
+
+def delete_order(order_id):
+    """
+    Deletes an order
+    :param order_id: int
+    """
+    c = conn.cursor()
+    c.execute('delete from order_widgets where order_id = ?', order_id)
+    c.execute('delete from orders where id = ?', order_id)
+
+
+def get_order_widget(order_widget_id):
+    """
+
+    :param order_widget_id:
+    :return:
+    """
+    c = conn.cursor()
+    c.execute('select id, order_id, widget_id, widget_size_id, '
+              'widget_finish_id, amount from order_widgets where '
+              'id = ?', (order_widget_id,))
 
     return c.fetchone()
 
@@ -196,9 +228,43 @@ def get_order_widget(order_id, widget_id):
 def add_widget_to_order(
         order_id, widget_id, widget_size_id,
         widget_finish_id, amount=1):
+    """
+    Adds a widget to an order. If the widget already exists on the order,
+    update the amount.
+    :param order_id: int
+    :param widget_id: int
+    :param widget_size_id: int
+    :param widget_finish_id: int
+    :param amount: int
+    :return: int
+    """
     c = conn.cursor()
     order_widget = (
         order_id, widget_id, widget_size_id, widget_finish_id, amount)
-    c.execute('insert into order_widgets values (?, ?, ?, ?, ?)', order_widget)
+    c.execute('select id, amount from order_widgets where order_id = ? and '
+              'widget_id = ? and widget_size_id = ? and '
+              'widget_finish_id = ?',
+              (order_id, widget_id, widget_size_id, widget_finish_id,))
+
+    matching_widget = c.fetchone()
+
+    if matching_widget:
+        order_widget_id, current_amount = matching_widget
+        new_amount = current_amount + amount
+        c.execute('update order_widgets set amount = ? '
+                  'where id = ?', (new_amount, order_widget_id))
+    else:
+        c.execute('insert into order_widgets (order_id, widget_id, '
+                  'widget_size_id, widget_finish_id, amount) values '
+                  '(?, ?, ?, ?, ?)', order_widget)
 
     return c.lastrowid
+
+
+def remove_widget_from_order(order_widget_id):
+    """
+    Removes a widget from an order.
+    :param order_widget_id: int
+    """
+    c = conn.cursor()
+    c.execute('delete from order_widgets where id = ?', (order_widget_id,))

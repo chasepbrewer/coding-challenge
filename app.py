@@ -26,7 +26,10 @@ URLS = [
     (r'/api/v1/widgets/types/', views.WidgetTypeListAPIHandler),
     (r'/api/v1/widgets/sizes/', views.WidgetSizeListAPIHandler),
     (r'/api/v1/widgets/finishes/', views.WidgetFinishListAPIHandler),
-    (r'/api/v1/orders/', views.OrderListAPIHandler)
+    (r'/api/v1/orders/', views.OrderListAPIHandler),
+    (r'/api/v1/orders/([0-9]+)/', views.OrderAPIHandler),
+    (r'/api/v1/orders/([0-9]+)/widgets/', views.OrderWidgetListAPIHandler),
+    (r'/api/v1/orders/([0-9]+)/widgets/([0-9]+)/', views.OrderWidgetAPIHandler)
 ]
 
 if __name__ == '__main__':
